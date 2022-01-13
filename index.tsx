@@ -8,41 +8,22 @@ import React, { useState } from 'react';
 
 import { PDFExporterProps } from './index.d'
 
-import { domToImage } from 'utils/dom-to-image/domToImage';
-import {  } from 'utils/dom-to-image/domToImage.d';
-import { imageToPDF } from 'utils/image-to-pdf/imageToPDF';
-import {  } from 'utils/image-to-pdf/imageToPDF';
+import { domToImages } from './utils/dom-to-image/domToImage';
+import {  } from './utils/dom-to-image/domToImage.d';
+import { exportPDF } from './utils/image-to-pdf/imageToPDF';
+import { PDFPaperType } from './utils/image-to-pdf/imageToPDF.d';
 
 
 function Exporter<T>(props: PDFExporterProps): JSX.Element {
   const [tableDatas, setTableDatas] = useState<Array<any>>();
 
-  const onClickExport = async (): Promise<void> => {
-    const data = getValues();
-
-    if (data.documentType === EXPORT_DOCUMENT_TYPE.EXCEL && props.excelExporterProps) {
-      showLoadingUI();
-      await excelJSExport(
-        props.excelExporterProps.jsonArrayData,
-        props.excelExporterProps.columns,
-        props.excelExporterProps.excelFileName,
-        props.excelExporterProps.options,
-      );
-      unShowLoadingUI();
-    } else if (
-      (data.documentType === EXPORT_DOCUMENT_TYPE.PDF_A4 || data.documentType === EXPORT_DOCUMENT_TYPE.PDF_LETTER) &&
-      props.pdfExporterProps
-    ) {
-      try {
-        showLoadingUI();
-        const imageURLs = await domToImages(data.documentType);
-        await exportPDF(imageURLs, data.documentType);
-        unShowLoadingUI();
-      } catch (error) {
-        modal.show(error);
-      }
-    } else {
-      modal.show("Critical error, please ask to Fin2b's developer");
+  const onClickExport = async (documentType: PDFPaperType): Promise<void> => {
+    // Set document type for something like radio-btn or select-box, and so on
+    try {
+      const imageURLs = await domToImages(documentType);
+      await exportPDF(imageURLs, documentType);
+    } catch (error) {
+      throw error;
     }
   };
 
