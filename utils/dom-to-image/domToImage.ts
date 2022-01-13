@@ -39,7 +39,6 @@ const domToImages: DomToImages = async (targetPaperType: PDFPaperType) => {
       return imageURLs;
     } else {
       try {
-        const imageURLs: string[] = [];
         const firstImageURL = await domtoimage.toPng(targetDOM, {
           width: tableWidth,
           height: firstImageMaxHeight + ADDITIONAL_HEIGHT,
