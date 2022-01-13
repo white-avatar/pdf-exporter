@@ -9,16 +9,17 @@ import React, { useState } from 'react';
 import { PDFExporterProps } from './index.d'
 
 import { domToImages } from './utils/dom-to-image/domToImage';
-import {  } from './utils/dom-to-image/domToImage.d';
-import { exportPDF } from './utils/image-to-pdf/imageToPDF';
-import { PDFPaperType } from './utils/image-to-pdf/imageToPDF.d';
-
+import { exportPDF, PDF_PAPER_TYPE } from './utils/image-to-pdf/imageToPDF';
 
 function Exporter<T>(props: PDFExporterProps): JSX.Element {
   const [tableDatas, setTableDatas] = useState<Array<any>>();
 
-  const onClickExport = async (documentType: PDFPaperType): Promise<void> => {
+  const onClickExport = async (e: any): Promise<void> => {
+    e.preventDefault();
+
     // Set document type for something like radio-btn or select-box, and so on
+    const documentType = PDF_PAPER_TYPE.PDF_A4;
+
     try {
       const imageURLs = await domToImages(documentType);
       await exportPDF(imageURLs, documentType);
