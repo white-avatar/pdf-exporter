@@ -1,0 +1,9 @@
+.pdf-containment {
+	overflow: hidden;
+	height: 0;
+	width: 0;
+}
+
+.pdf-container {
+	width: 100vw;
+}
