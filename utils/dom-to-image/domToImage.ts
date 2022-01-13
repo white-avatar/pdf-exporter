@@ -48,11 +48,20 @@ const domToImages: DomToImages = async (targetPaperType: PDFPaperType) => {
         let currentYOffset = firstImageMaxHeight;
 
         while (currentYOffset < tableHeight) {
-          const otherImageURL = await domtoimage.toPng(targetDOM, {
-            width: tableWidth,
-            height: otherImageMaxHeight + ADDITIONAL_HEIGHT,
-            style: { marginTop: `${-currentYOffset}px` },
-          });
+          let otherImageURL: string;
+          if (tableHeight - currentYOffset < otherImageMaxHeight) {
+            otherImageURL = await domtoimage.toPng(targetDOM, {
+              width: tableWidth,
+              height: tableHeight - currentYOffset + ADDITIONAL_HEIGHT,
+              style: { marginTop: `${-currentYOffset}px` },
+            });
+          } else {
+            otherImageURL = await domtoimage.toPng(targetDOM, {
+              width: tableWidth,
+              height: otherImageMaxHeight + ADDITIONAL_HEIGHT,
+              style: { marginTop: `${-currentYOffset}px` },
+            });
+          }
 
           imageURLs.push(otherImageURL);
           currentYOffset += otherImageMaxHeight;
